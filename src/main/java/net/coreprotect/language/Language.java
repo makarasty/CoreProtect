@@ -2,6 +2,8 @@ package net.coreprotect.language;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.ChatColor;
+
 public class Language {
 
     private static ConcurrentHashMap<Phrase, String> phrases = new ConcurrentHashMap<>();
@@ -21,10 +23,16 @@ public class Language {
     }
 
     protected static void setUserPhrase(Phrase phrase, String value) {
+        if (value != null) {
+            value = ChatColor.translateAlternateColorCodes('&', value);
+        }
         userPhrases.put(phrase, value);
     }
 
     protected static void setTranslatedPhrase(Phrase phrase, String value) {
+        if (value != null) {
+            value = ChatColor.translateAlternateColorCodes('&', value);
+        }
         translatedPhrases.put(phrase, value);
     }
 
@@ -127,6 +135,7 @@ public class Language {
         phrases.put(Phrase.INVALID_INCLUDE, "\"{0}\" is an invalid block/entity name.");
         phrases.put(Phrase.INVALID_INCLUDE_COMBO, "That is an invalid block/entity combination.");
         phrases.put(Phrase.INVALID_PARAMETER, "\"{0}\" is not a supported parameter.");
+        phrases.put(Phrase.INVALID_ITEM_ID, "Please enter a valid item id.");
         phrases.put(Phrase.INVALID_RADIUS, "Please enter a valid radius.");
         phrases.put(Phrase.INVALID_SELECTION, "{0} selection not found.");
         phrases.put(Phrase.INVALID_USERNAME, "\"{0}\" is an invalid username.");
