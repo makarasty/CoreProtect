@@ -24,7 +24,7 @@ jobs:
           git remote add upstream https://github.com/PlayPro/CoreProtect.git
           git fetch upstream
           git checkout master
-          git merge upstream/master --ff-only || echo "Already in sync or diverged, skipping push"
+          git merge upstream/master --ff-only || echo "Diverged, skipping"
           git push origin master || echo "Nothing to push"
 
   build:
@@ -47,7 +47,8 @@ jobs:
           cache: 'maven'
 
       - name: Fix branch error
-        run: echo "branch: development" >> src/main/resources/plugin.yml
+        run: |
+          echo "branch: development" >> src/main/resources/plugin.yml
 
       - name: Build with Maven
         run: mvn -B clean package
