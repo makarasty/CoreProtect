@@ -24,8 +24,8 @@ jobs:
           git remote add upstream https://github.com/PlayPro/CoreProtect.git
           git fetch upstream
           git checkout master
-          git merge upstream/master --ff-only
-          git push origin master
+          git merge upstream/master --ff-only || echo "Already in sync or diverged, skipping push"
+          git push origin master || echo "Nothing to push"
 
   build:
     runs-on: ubuntu-latest
@@ -38,26 +38,30 @@ jobs:
         with:
           repository: PlayPro/CoreProtect
           fetch-depth: 0
+
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
           cache: 'maven'
+
       - name: Fix branch error
-        run: |
-          echo "branch: development" >> src/main/resources/plugin.yml
+        run: echo "branch: development" >> src/main/resources/plugin.yml
+
       - name: Build with Maven
         run: mvn -B clean package
+
       - name: Upload CoreProtect Jar
         uses: actions/upload-artifact@v4
         with:
           name: CoreProtect Jar
           path: target/CoreProtect-*.jar
+
       - name: Get current date
         id: date
-        run: |
-          echo "date=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_OUTPUT
+        run: echo "date=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
